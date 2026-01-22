@@ -1,0 +1,271 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "tokyonight",
+  "autoupdate": true,
+  "share": "manual",
+  "default_agent": "sre-build",
+  "compaction": {
+    "auto": true,
+    "prune": true
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "*.log",
+      ".opencode/rlm_state/**"
+    ]
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "webfetch": "allow",
+    "skill": {
+      "*": "allow"
+    }
+  },
+  "agent": {
+    "sre-build": {
+      "description": "Full SRE/DevOps agent with all tools enabled for infrastructure and operations work",
+      "mode": "primary",
+      "prompt": "{file:./prompts/sre-build.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "webfetch": true,
+        "skill": true
+      },
+      "permission": {
+        "bash": {
+          "*": "allow",
+          "rm -rf /*": "deny",
+          "rm -rf /": "deny"
+        }
+      }
+    },
+    "sre-plan": {
+      "description": "Analysis and planning agent for SRE tasks - read-only mode for safe investigation",
+      "mode": "primary",
+      "prompt": "{file:./prompts/sre-plan.md}",
+      "temperature": 0.1,
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "webfetch": true,
+        "skill": true
+      },
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "cat *": "allow",
+          "grep *": "allow",
+          "kubectl get *": "allow",
+          "kubectl describe *": "allow",
+          "kubectl logs *": "allow",
+          "docker ps *": "allow",
+          "docker logs *": "allow",
+          "podman ps *": "allow",
+          "podman logs *": "allow",
+          "podman inspect *": "allow",
+          "podman pod ps *": "allow",
+          "podman images *": "allow",
+          "terraform plan *": "allow",
+          "terraform show *": "allow",
+          "aws * describe*": "allow",
+          "aws * list*": "allow",
+          "aws * get*": "allow",
+          "gcloud * describe *": "allow",
+          "gcloud * list *": "allow"
+        }
+      }
+    },
+    "rlm-subcall": {
+      "description": "RLM sub-LLM for chunk-level analysis. Given a chunk of context (logs, configs, manifests) and a query, extract only what is relevant and return structured results.",
+      "mode": "subagent",
+      "temperature": 0.1,
+      "tools": {
+        "read": true,
+        "write": false,
+        "edit": false,
+        "bash": false,
+        "webfetch": false
+      }
+    },
+    "log-analyzer": {
+      "description": "Specialized agent for analyzing application and system logs - identifies patterns, errors, and anomalies",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/log-analyzer.md}",
+      "temperature": 0.1,
+      "tools": {
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "bash": true,
+        "write": false,
+        "edit": false
+      },
+      "permission": {
+        "bash": {
+          "*": "deny",
+          "grep *": "allow",
+          "cat *": "allow",
+          "head *": "allow",
+          "tail *": "allow",
+          "wc *": "allow",
+          "sort *": "allow",
+          "uniq *": "allow",
+          "awk *": "allow",
+          "sed *": "allow"
+        }
+      }
+    },
+    "k8s-expert": {
+      "description": "Kubernetes specialist for cluster operations, troubleshooting, and manifest generation",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/k8s-expert.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "grep": true,
+        "glob": true
+      },
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "kubectl get *": "allow",
+          "kubectl describe *": "allow",
+          "kubectl logs *": "allow",
+          "kubectl explain *": "allow",
+          "kubectl api-resources *": "allow",
+          "helm list *": "allow",
+          "helm status *": "allow",
+          "helm get *": "allow"
+        }
+      }
+    },
+    "terraform-expert": {
+      "description": "Terraform/IaC specialist for infrastructure provisioning and state management",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/terraform-expert.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "grep": true,
+        "glob": true
+      },
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "terraform plan *": "allow",
+          "terraform show *": "allow",
+          "terraform state list *": "allow",
+          "terraform state show *": "allow",
+          "terraform validate *": "allow",
+          "terraform fmt *": "allow",
+          "terraform providers *": "allow"
+        }
+      }
+    },
+    "podman-expert": {
+      "description": "Podman and container specialist for rootless containers, pod management, and systemd integration",
+      "mode": "subagent",
+      "prompt": "{file:./prompts/podman-expert.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "grep": true,
+        "glob": true
+      },
+      "permission": {
+        "bash": {
+          "*": "ask",
+          "podman ps *": "allow",
+          "podman images *": "allow",
+          "podman logs *": "allow",
+          "podman inspect *": "allow",
+          "podman stats *": "allow",
+          "podman pod ps *": "allow",
+          "podman pod inspect *": "allow",
+          "podman network ls *": "allow",
+          "podman network inspect *": "allow",
+          "podman volume ls *": "allow",
+          "podman volume inspect *": "allow",
+          "podman info *": "allow",
+          "podman system df *": "allow",
+          "podman history *": "allow",
+          "systemctl --user status *": "allow",
+          "systemctl --user list-units *": "allow"
+        }
+      }
+    }
+  },
+  "command": {
+    "rlm": {
+      "template": "Load the rlm skill to process a large context file. $ARGUMENTS",
+      "description": "Run RLM workflow for large context processing (logs, configs, etc.)",
+      "agent": "sre-build"
+    },
+    "incident": {
+      "template": "Start incident investigation mode. Gather metrics, logs, and recent changes for: $ARGUMENTS\n\nFollow the incident response workflow:\n1. Assess severity and impact\n2. Identify affected systems\n3. Gather relevant context\n4. Propose mitigation steps",
+      "description": "Start incident investigation workflow",
+      "agent": "sre-build"
+    },
+    "k8s-debug": {
+      "template": "Debug Kubernetes issue: $ARGUMENTS\n\nCheck:\n1. Pod status and events\n2. Container logs\n3. Resource constraints\n4. Network policies\n5. Recent deployments",
+      "description": "Debug Kubernetes cluster issues",
+      "agent": "k8s-expert",
+      "subtask": true
+    },
+    "tf-plan": {
+      "template": "Review Terraform configuration and create execution plan for: $ARGUMENTS\n\nProvide:\n1. Resource changes summary\n2. Potential risks\n3. Cost implications if applicable\n4. Recommendations",
+      "description": "Review and plan Terraform changes",
+      "agent": "terraform-expert",
+      "subtask": true
+    },
+    "analyze-logs": {
+      "template": "Analyze logs from: $1\n\nLooking for: $2\n\nProvide:\n1. Error patterns and frequency\n2. Timeline of events\n3. Root cause indicators\n4. Recommended actions",
+      "description": "Analyze log files for patterns and issues",
+      "agent": "log-analyzer",
+      "subtask": true
+    },
+    "runbook": {
+      "template": "Create or update runbook for: $ARGUMENTS\n\nInclude:\n1. Overview and scope\n2. Prerequisites\n3. Step-by-step procedures\n4. Rollback steps\n5. Validation checklist\n6. Troubleshooting guide",
+      "description": "Generate operational runbook",
+      "agent": "sre-build"
+    },
+    "postmortem": {
+      "template": "Create blameless postmortem document for incident: $ARGUMENTS\n\nInclude:\n1. Incident summary\n2. Timeline of events\n3. Root cause analysis\n4. Impact assessment\n5. Action items\n6. Lessons learned",
+      "description": "Generate incident postmortem document",
+      "agent": "sre-plan"
+    },
+    "slo-review": {
+      "template": "Review SLO/SLI definitions and error budget status for: $ARGUMENTS\n\nAnalyze:\n1. Current SLO compliance\n2. Error budget consumption\n3. Trending analysis\n4. Recommendations for improvement",
+      "description": "Review SLO compliance and error budgets",
+      "agent": "sre-plan"
+    },
+    "podman-debug": {
+      "template": "Debug Podman container issue: $ARGUMENTS\n\nCheck:\n1. Container status and logs\n2. Pod configuration (if applicable)\n3. Network and volume mounts\n4. Resource constraints\n5. Rootless/systemd integration issues",
+      "description": "Debug Podman container issues",
+      "agent": "podman-expert",
+      "subtask": true
+    }
+  },
+  "instructions": [
+    "AGENTS.md",
+    "./knowledge/*.md"
+  ]
+}

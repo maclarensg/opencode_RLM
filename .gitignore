@@ -1,0 +1,42 @@
+# node_modules
+.opencode/node_modules/
+
+# RLM state files
+.opencode/rlm_state/
+
+# Context files (user-provided)
+context/*
+!context/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# Environment
+.env
+.venv/
+env/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (unless intentionally committed)
+*.log
+
+# Temporary files
+*.tmp
+*.temp
