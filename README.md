@@ -1,4 +1,6 @@
-# OpenCode RLM - SRE/DevOps Edition
+<# OpenCode RLM - SRE/DevOps Edition
+
+Inspired by brainqub3 claude_code_RLM, this is an OpenCode version for RLM (Recursive Language Model)
 
 A Recursive Language Model (RLM) implementation for OpenCode, specialized for Site Reliability Engineering and DevOps workflows.
 
@@ -202,3 +204,4 @@ Adapted from [claude_code_RLM](https://github.com/Brainqub3/claude_code_RLM) for
 ## License
 
 MIT License - See LICENSE for details.
+
